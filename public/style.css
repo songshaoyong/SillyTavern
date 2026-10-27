@@ -1192,6 +1192,29 @@ body .panelControlBar {
     position: relative;
 }
 
+/* The persona's own messages sit on the right. Host transcripts stay on the left. */
+#chat .mes.mes_self {
+    flex-direction: row-reverse;
+}
+
+#chat .mes.mes_self .mes_block {
+    width: fit-content;
+    max-width: 75%;
+    flex: 0 1 auto;
+    margin-left: auto;
+    padding-left: 0;
+    padding-right: 10px;
+}
+
+#chat .mes.mes_self .ch_name > .flex1 {
+    justify-content: flex-end;
+}
+
+#chat .mes.mes_self .mes_text {
+    padding-left: var(--mes-right-spacing);
+    padding-right: 0;
+}
+
 #chat .mes.selected {
     /* background-color: rgb(from var(--SmartThemeQuoteColor) r g b / .5); */
     background-color: rgb(102, 0, 0);

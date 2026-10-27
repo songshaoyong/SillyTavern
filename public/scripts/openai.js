@@ -2697,7 +2697,8 @@ export async function createGenerationParameters(settings, model, type, messages
 
     // DeepSeek only accepts image blocks in user messages. Media can also be
     // attached to system and assistant messages by the shared inlining path.
-    const isDeepSeekVisionModel = typeof model === 'string' && model.toLowerCase().includes('deepseek-v4-flash-vision-exp');
+    const deepseekName = typeof model === 'string' ? model.toLowerCase() : '';
+    const isDeepSeekVisionModel = deepseekName.includes('deepseek-flash') || deepseekName.includes('deepseek-v4-flash');
     if (isDeepSeekVisionModel) {
         messages = messages.flatMap((message) => {
             if (!['system', 'assistant'].includes(message.role) || !Array.isArray(message.content)) {
@@ -6285,8 +6286,9 @@ export function isImageInliningSupported() {
         'moonshot-v1-128k-vision-preview',
         'kimi-k2.5',
         'kimi-latest',
-        // DeepSeek
-        'deepseek-v4-flash-vision-exp',
+        // DeepSeek：deepseek-flash（V4.1）原生看图，deepseek-v4-flash 是旧名
+        'deepseek-flash',
+        'deepseek-v4-flash',
         // Z.AI (GLM)
         'glm-4.5v',
         'glm-4.6v',

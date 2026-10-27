@@ -1,0 +1,50 @@
+<div id="transcript_feed_settings" class="padding5">
+    <div class="flex-container alignItemsCenter">
+        <h4 class="flex1 margin0">外部转写</h4>
+        <label class="checkbox_label" for="transcript_feed_enabled">
+            <input id="transcript_feed_enabled" type="checkbox">
+            <span>启用</span>
+        </label>
+    </div>
+    <small class="opacity50p">从 WebSocket 接收定稿文本，记成指定说话人。不足设定字数先攒着，超过后再发送。发送时附带当时的直播间截图、在线人数、场次和本场互动。与上一句相同、没有打开的对话、场控正在生成时丢掉，不补写。</small>
+    <label for="transcript_feed_url">WebSocket 地址</label>
+    <input id="transcript_feed_url" class="text_pole" type="text" placeholder="ws://127.0.0.1:8757/ws">
+    <div class="flex-container gap5px">
+        <div class="flex1">
+            <label for="transcript_feed_event">事件类型</label>
+            <input id="transcript_feed_event" class="text_pole" type="text" placeholder="caption">
+        </div>
+        <div class="flex1">
+            <label for="transcript_feed_path">文本字段</label>
+            <input id="transcript_feed_path" class="text_pole" type="text" placeholder="data.content">
+        </div>
+    </div>
+    <div class="flex-container gap5px">
+        <div class="flex1">
+            <label for="transcript_feed_room">房间过滤</label>
+            <input id="transcript_feed_room" class="text_pole" type="text" placeholder="留空表示全部">
+        </div>
+        <div class="flex1">
+            <label for="transcript_feed_speaker">说话人</label>
+            <input id="transcript_feed_speaker" class="text_pole" type="text" placeholder="主播">
+        </div>
+    </div>
+    <label for="transcript_feed_min">超过多少字再发送</label>
+    <input id="transcript_feed_min" class="text_pole" type="number" min="1" max="2000" step="1" placeholder="100">
+    <small class="opacity50p">默认 100。改完离开输入框后立即按新字数再判断，已经攒下的文字不用等下一句。</small>
+    <label for="transcript_feed_template">写入模板</label>
+    <textarea id="transcript_feed_template" class="text_pole textarea_compact" rows="2" placeholder="{{speaker}}：{{text}}"></textarea>
+    <label class="checkbox_label" for="transcript_feed_situation">
+        <input id="transcript_feed_situation" type="checkbox">
+        <span>发送时附带直播间截图、人数、场次和本场互动</span>
+    </label>
+    <label class="checkbox_label" for="transcript_feed_reply">
+        <input id="transcript_feed_reply" type="checkbox">
+        <span>写入后让当前角色回复</span>
+    </label>
+    <label class="checkbox_label" for="transcript_feed_skip">
+        <input id="transcript_feed_skip" type="checkbox">
+        <span>场控正在生成则丢掉本次</span>
+    </label>
+    <div id="transcript_feed_status" class="opacity50p marginTop5"></div>
+</div>

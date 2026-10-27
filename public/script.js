@@ -2656,6 +2656,7 @@ export function updateMessageElement(mes, { messageId = chat.length - 1, message
         // ...(type ?? { type }),
         'type': mes.extra?.type ?? '',
     });
+    messageElement.toggleClass('mes_self', mes.is_user === true && mes.name === name1);
 
     messageElement.find('.avatar img').attr('src', avatarImg);
     messageElement.find('.ch_name .name_text').text(mes.name);
@@ -5889,8 +5890,14 @@ export async function sendMessageAsUser(messageText, messageBias, insertAt = nul
         message.extra.token_count = await getTokenCountAsync(message.mes, 0);
     }
 
-    // Lock user avatar to a persona.
-    if (avatar in power_user.personas) {
+    // A named group member uses that character's avatar. The persona stays on the user's own messages.
+    const namedMember = name && name !== name1
+        ? characters.find(x => x.name === name || x.avatar === name || x.avatar === avatar)
+        : undefined;
+    if (namedMember?.avatar && namedMember.avatar !== 'none') {
+        message.force_avatar = getThumbnailUrl('avatar', namedMember.avatar);
+        message.original_avatar = namedMember.avatar;
+    } else if (avatar in power_user.personas) {
         message.force_avatar = getThumbnailUrl('persona', avatar);
     }
 
