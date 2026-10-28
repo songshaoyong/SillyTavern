@@ -173,21 +173,28 @@ async function loadSituation(roomId) {
 }
 
 async function attachScreenshot(message, image) {
-    const url = await saveBase64AsFile(image, 'transcript', `live-${Date.now()}`, 'jpg');
-    message.extra = message.extra && typeof message.extra === 'object' ? message.extra : {};
-    message.extra.media = [{
-        url,
-        type: MEDIA_TYPE.IMAGE,
-        title: '直播间画面',
-        source: MEDIA_SOURCE.API,
-    }];
-    message.extra.media_index = 0;
-    message.extra.inline_image = true;
-    message.extra.media_display = MEDIA_DISPLAY.LIST;
-    const messageId = document.querySelectorAll('#chat .mes').length - 1;
-    const node = document.querySelector(`#chat .mes[mesid="${messageId}"]`);
-    if (node && globalThis.$) appendMediaToMessage(message, globalThis.$(node));
-    await saveChatConditional();
+    // 没有打开的聊天（初始化中 / 未选角色）时保存必然失败，还会弹出"聊天无法保存"的报错
+    if (!getCurrentChatId()) return;
+    try {
+        const url = await saveBase64AsFile(image, 'transcript', `live-${Date.now()}`, 'jpg');
+        message.extra = message.extra && typeof message.extra === 'object' ? message.extra : {};
+        message.extra.media = [{
+            url,
+            type: MEDIA_TYPE.IMAGE,
+            title: '直播间画面',
+            source: MEDIA_SOURCE.API,
+        }];
+        message.extra.media_index = 0;
+        message.extra.inline_image = true;
+        message.extra.media_display = MEDIA_DISPLAY.LIST;
+        const messageId = document.querySelectorAll('#chat .mes').length - 1;
+        const node = document.querySelector(`#chat .mes[mesid="${messageId}"]`);
+        if (node && globalThis.$) appendMediaToMessage(message, globalThis.$(node));
+        await saveChatConditional();
+    } catch (err) {
+        // 画面附不上去不应该影响这条转写本身，更不应该弹保存失败
+        console.warn('[transcript-feed] 附加直播间画面失败', err);
+    }
 }
 
 function dropHeld(roomKey, reason) {
